@@ -4,4 +4,4 @@
 
 mod day01;
 
-aoc_runner_derive::aoc_lib! { year = 2021 }
+aoc_runner_derive::aoc_lib! { year = 2016 }
