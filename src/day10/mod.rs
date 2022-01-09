@@ -63,7 +63,7 @@ where
         }) = transfer_inst
         {
             let mut add_target = |tgt: String, val: i64| {
-                let values = bots.entry(tgt.clone()).or_insert(Vec::new());
+                let values = bots.entry(tgt.clone()).or_insert_with(Vec::new);
                 values.push(val);
                 values.sort_unstable();
 
@@ -83,7 +83,7 @@ where
 fn initial_state(inp: &[Instruction]) -> HashMap<String, Vec<i64>> {
     inp.iter().fold(HashMap::new(), |mut acc, it| {
         if let Instruction::Input { value, target } = it {
-            let elem = acc.entry(target.clone()).or_insert(Vec::new());
+            let elem = acc.entry(target.clone()).or_insert_with(Vec::new);
             elem.push(*value);
             elem.sort_unstable();
         }
