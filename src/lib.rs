@@ -2,6 +2,8 @@
 #![warn(nonstandard_style, rust_2018_idioms)]
 #![allow(clippy::implicit_hasher)]
 
+mod assembunny;
+
 mod day01;
 mod day02;
 mod day03;
@@ -15,5 +17,6 @@ mod day10;
 mod day12;
 mod day13;
 mod day20;
+mod day23;
 
 aoc_runner_derive::aoc_lib! { year = 2016 }

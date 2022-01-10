@@ -1,62 +1,9 @@
+use super::assembunny::{parse_instructions, to_register, Cpu, Instruction};
 use aoc_runner_derive::{aoc, aoc_generator};
-use parse_display::{Display, FromStr};
-
-#[derive(Display, FromStr, Copy, Clone, Debug)]
-#[display("format")]
-pub enum Value {
-    #[from_str(regex = "(?P<0>[-0-9]+)")]
-    Immediate(i32),
-
-    #[from_str(regex = "(?P<0>[A-Za-z])")]
-    Register(char),
-}
-
-fn to_register(c: char) -> usize {
-    match c {
-        'a' | 'A' => 0,
-        'b' | 'B' => 1,
-        'c' | 'C' => 2,
-        'd' | 'D' => 3,
-        _ => unreachable!(),
-    }
-}
-
-impl Value {
-    fn evaluate(self, regs: &[i32; 4]) -> i32 {
-        match self {
-            Value::Immediate(val) => val,
-            Value::Register(r) => {
-                let r = to_register(r);
-                regs[r]
-            }
-        }
-    }
-}
-
-#[derive(Display, FromStr, Copy, Clone, Debug)]
-pub enum Instruction {
-    #[display("cpy {0} {1}")]
-    Copy(Value, char),
-
-    #[display("inc {0}")]
-    Inc(char),
-
-    #[display("dec {0}")]
-    Dec(char),
-
-    #[display("jnz {0} {1}")]
-    JumpNotZero(Value, i32),
-}
-
-#[derive(Default, Copy, Clone, Debug)]
-struct Cpu {
-    registers: [i32; 4],
-    pc: usize,
-}
 
 #[aoc_generator(day12)]
 pub fn generate(inp: &str) -> Vec<Instruction> {
-    inp.lines().filter_map(|it| it.parse().ok()).collect()
+    parse_instructions(inp)
 }
 
 fn execute_instructions(cpu: &mut Cpu, instructions: &[Instruction]) -> i32 {
@@ -86,6 +33,7 @@ fn execute_instructions(cpu: &mut Cpu, instructions: &[Instruction]) -> i32 {
                     cpu.pc += r.abs() as usize;
                 }
             }
+            Instruction::Toggle(_) => unreachable!(),
         }
     }
 
