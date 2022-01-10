@@ -18,3 +18,4 @@ parse-display-derive = "0.5.3"
 
 cipher-crypt = "0.18.0"
 md5 = "0.7.0"
+pathfinding = "3.0.5"
