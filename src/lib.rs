@@ -14,5 +14,6 @@ mod day09;
 mod day10;
 mod day12;
 mod day13;
+mod day20;
 
 aoc_runner_derive::aoc_lib! { year = 2016 }
