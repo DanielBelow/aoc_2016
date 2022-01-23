@@ -1,11 +1,6 @@
-use aoc_runner_derive::{aoc, aoc_generator};
+use aoc_runner_derive::aoc;
 use itertools::Itertools;
 use std::collections::HashMap;
-
-#[aoc_generator(day14)]
-fn generate(_: &str) -> String {
-    "ahsbgdzn".to_string()
-}
 
 struct HashCache<'a> {
     input: &'a str,
