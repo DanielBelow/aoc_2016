@@ -33,9 +33,9 @@ impl Cpu {
                     if val == 0 {
                         self.pc += 1;
                     } else if offset < 0 {
-                        self.pc -= offset.abs() as usize;
+                        self.pc -= offset.unsigned_abs() as usize;
                     } else if offset > 0 {
-                        self.pc += offset.abs() as usize;
+                        self.pc += offset.unsigned_abs() as usize;
                     }
                 }
                 Instruction::Toggle(r) => {
