@@ -17,15 +17,18 @@ pub fn generate(inp: &str) -> Vec<Range> {
         .collect()
 }
 
-#[aoc(day20, part1)]
-pub fn part1(blacklist: &[Range]) -> Option<usize> {
-    let mut valid_ips = vec![true; 4_294_967_296_usize];
-
-    for range in blacklist {
-        for e in &mut valid_ips[range.from..=range.to] {
+fn blacklist_ips(ranges: &[Range], ips: &mut [bool]) {
+    for range in ranges {
+        for e in &mut ips[range.from..=range.to] {
             *e = false;
         }
     }
+}
+
+#[aoc(day20, part1)]
+pub fn part1(blacklist: &[Range]) -> Option<usize> {
+    let mut valid_ips = vec![true; 4_294_967_296_usize];
+    blacklist_ips(blacklist, &mut valid_ips);
 
     valid_ips.iter().position(|it| *it)
 }
@@ -33,12 +36,7 @@ pub fn part1(blacklist: &[Range]) -> Option<usize> {
 #[aoc(day20, part2)]
 pub fn part2(blacklist: &[Range]) -> usize {
     let mut valid_ips = vec![true; 4_294_967_296_usize];
-
-    for range in blacklist {
-        for e in &mut valid_ips[range.from..=range.to] {
-            *e = false;
-        }
-    }
+    blacklist_ips(blacklist, &mut valid_ips);
 
     valid_ips.iter().filter(|it| **it).count()
 }
@@ -52,9 +50,17 @@ mod tests {
                              4-7";
 
     #[test]
-    fn test_sample_p1() {
+    fn test_sample() {
         let gen = generate(TEST_DATA);
-        let res = part1(&gen).unwrap();
-        assert_eq!(res, 3);
+        let mut valid_ips = vec![true; 10];
+        blacklist_ips(&gen, &mut valid_ips);
+
+        let not_blocked = valid_ips
+            .iter()
+            .enumerate()
+            .filter_map(|(idx, it)| if *it { Some(idx) } else { None })
+            .collect_vec();
+
+        assert_eq!(not_blocked, vec![3, 9]);
     }
 }
