@@ -40,7 +40,7 @@ fn get_next_row(current: &String) -> (String, usize) {
         let new_tile = get_new_tile(left, center, right);
         next_row.push(new_tile);
 
-        num_safe_tiles += if new_tile == '.' { 1 } else { 0 };
+        num_safe_tiles += usize::from(new_tile == '.');
     }
 
     (next_row, num_safe_tiles)
