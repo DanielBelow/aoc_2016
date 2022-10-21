@@ -65,8 +65,7 @@ pub fn part1(inp: &[Instruction]) -> usize {
     execute_instructions(inp, &mut map);
 
     map.iter().fold(0, |acc, it| {
-        it.iter()
-            .fold(acc, |acc, it| acc + usize::from(*it == '#'))
+        it.iter().fold(acc, |acc, it| acc + usize::from(*it == '#'))
     })
 }
 
