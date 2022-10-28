@@ -43,54 +43,43 @@ fn has_three_repetitions(hash: &str) -> Option<char> {
 
 fn next_hash_has_five_repetitions(
     num_hashes: usize,
-    mut idx: usize,
-    target: Option<char>,
+    idx: usize,
+    target: char,
     cache: &mut HashCache<'_>,
 ) -> bool {
-    for _ in 0..num_hashes {
-        idx += 1;
-        let hash = cache.calculate_hash(idx);
-        if has_repetitions(5, hash, target).is_some() {
-            return true;
-        }
-    }
-
-    false
+    (idx + 1..idx + num_hashes).any(|it| {
+        let hash = cache.calculate_hash(it);
+        has_repetitions(5, hash, Some(target)).is_some()
+    })
 }
 
 fn stretch_key(num_stretches: usize, input: &str, idx: usize) -> String {
-    let to_hash = format!("{}{}", input, idx);
+    let to_hash = format!("{input}{idx}");
 
-    let mut hash = format!("{:x}", md5::compute(&to_hash));
-    for _ in 0..num_stretches {
-        hash = format!("{:x}", md5::compute(&hash));
-    }
-
-    hash
+    let hash = |txt: &str| -> String { format!("{:x}", md5::compute(txt)) };
+    (0..num_stretches).fold(hash(&to_hash), |acc, _| hash(&acc))
 }
 
 fn is_key(idx: usize, cache: &mut HashCache<'_>) -> bool {
     let hash = cache.calculate_hash(idx);
-    match has_three_repetitions(hash) {
-        None => false,
-        c => next_hash_has_five_repetitions(1000, idx, c, cache),
-    }
+
+    has_three_repetitions(hash).map_or(false, |it| {
+        next_hash_has_five_repetitions(1_000, idx, it, cache)
+    })
 }
 
 fn find_idx_for_nth_hash(n: usize, cache: &mut HashCache<'_>) -> usize {
-    let mut cur_idx = 0;
     let mut seen_keys = 0;
-    loop {
-        if is_key(cur_idx, cache) {
-            seen_keys += 1;
-        }
+
+    for cur_idx in 0.. {
+        seen_keys += usize::from(is_key(cur_idx, cache));
 
         if seen_keys == n {
             return cur_idx;
         }
-
-        cur_idx += 1;
     }
+
+    unreachable!()
 }
 
 #[aoc(day14, part1)]

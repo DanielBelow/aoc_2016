@@ -6,7 +6,7 @@ const INPUT: &str = "mmsxrhfx";
 
 fn hash(data: &str) -> String {
     let digest = md5::compute(data);
-    let hash = format!("{:x}", digest);
+    let hash = format!("{digest:x}");
     hash.chars().take(4).join("")
 }
 
@@ -15,7 +15,7 @@ fn get_successors(x: usize, y: usize, path: &str) -> Vec<(usize, usize, String)>
         return vec![];
     }
 
-    let to_hash = format!("{}{}", INPUT, path);
+    let to_hash = format!("{INPUT}{path}");
     let cur_hash = hash(&to_hash);
     let directions = cur_hash
         .chars()
@@ -26,17 +26,17 @@ fn get_successors(x: usize, y: usize, path: &str) -> Vec<(usize, usize, String)>
 
     // directions are UP, DOWN, LEFT, RIGHT
     if y > 0 && directions[0] {
-        successors.push((x, y - 1, format!("{}{}", path, "U")));
+        successors.push((x, y - 1, format!("{path}U")));
     }
     if y < 3 && directions[1] {
-        successors.push((x, y + 1, format!("{}{}", path, "D")));
+        successors.push((x, y + 1, format!("{path}D")));
     }
 
     if x > 0 && directions[2] {
-        successors.push((x - 1, y, format!("{}{}", path, "L")));
+        successors.push((x - 1, y, format!("{path}L")));
     }
     if x < 3 && directions[3] {
-        successors.push((x + 1, y, format!("{}{}", path, "R")));
+        successors.push((x + 1, y, format!("{path}R")));
     }
 
     successors

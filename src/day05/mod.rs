@@ -10,7 +10,7 @@ pub fn part1(inp: &str) -> Option<String> {
             break;
         }
 
-        let inp_with_idx = format!("{}{}", inp, idx);
+        let inp_with_idx = format!("{inp}{idx}");
         let digest = format!("{:x}", md5::compute(&inp_with_idx));
         if digest.starts_with("00000") {
             let sixth_char = digest.chars().nth(5)?;
@@ -33,7 +33,7 @@ pub fn part2(inp: &str) -> Option<String> {
             return Some(password.iter().join(""));
         }
 
-        let inp_with_idx = format!("{}{}", inp, idx);
+        let inp_with_idx = format!("{inp}{idx}");
         let digest = format!("{:x}", md5::compute(&inp_with_idx));
         if digest.starts_with("00000") {
             let sixth_char = digest.chars().nth(5)?;

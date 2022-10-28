@@ -10,7 +10,7 @@ pub fn generate(inp: &str) -> Option<usize> {
 #[aoc(day19, part1)]
 #[allow(clippy::trivially_copy_pass_by_ref)]
 pub fn part1(inp: &usize) -> usize {
-    let binary = format!("{:b}", inp);
+    let binary = format!("{inp:b}");
 
     let mut vec = binary.chars().map(|it| it.to_string()).collect_vec();
     vec.rotate_left(1);
