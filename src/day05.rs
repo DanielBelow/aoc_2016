@@ -11,7 +11,7 @@ pub fn part1(inp: &str) -> Option<String> {
         }
 
         let inp_with_idx = format!("{inp}{idx}");
-        let digest = format!("{:x}", md5::compute(&inp_with_idx));
+        let digest = format!("{:x}", md5::compute(inp_with_idx));
         if digest.starts_with("00000") {
             let sixth_char = digest.chars().nth(5)?;
             password.push(sixth_char);
@@ -34,7 +34,7 @@ pub fn part2(inp: &str) -> Option<String> {
         }
 
         let inp_with_idx = format!("{inp}{idx}");
-        let digest = format!("{:x}", md5::compute(&inp_with_idx));
+        let digest = format!("{:x}", md5::compute(inp_with_idx));
         if digest.starts_with("00000") {
             let sixth_char = digest.chars().nth(5)?;
             if let Some(dgt) = sixth_char.to_digit(10) {
