@@ -11,11 +11,11 @@ pub struct Triangle {
 }
 
 impl Triangle {
-    fn new(a: usize, b: usize, c: usize) -> Self {
+    const fn new(a: usize, b: usize, c: usize) -> Self {
         Self { a, b, c }
     }
 
-    fn is_valid(&self) -> bool {
+    const fn is_valid(&self) -> bool {
         if self.b + self.c <= self.a {
             return false;
         }

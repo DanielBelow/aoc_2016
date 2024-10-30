@@ -116,7 +116,7 @@ mod tests {
             RotatePosition('d'),
         ];
 
-        let res = scramble("abcde", &insts).unwrap();
-        assert_eq!(res, "decab");
+        let res = scramble("abcde", &insts);
+        assert_eq!(res, Some("decab".to_string()));
     }
 }

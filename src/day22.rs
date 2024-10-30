@@ -18,17 +18,17 @@ pub struct Node {
 }
 
 impl Node {
-    fn is_empty(&self) -> bool {
+    const fn is_empty(&self) -> bool {
         self.used == 0
     }
 
-    fn fits_onto(&self, other: &Node) -> bool {
+    const fn fits_onto(&self, other: &Self) -> bool {
         self.used <= (other.size - other.used)
     }
 }
 
 #[aoc_generator(day22)]
-pub fn generate(inp: &str) -> Vec<Vec<Node>> {
+pub fn generate(inp: &str) -> Option<Vec<Vec<Node>>> {
     let mut nodes = vec![];
 
     for line in inp.lines().skip(2) {
@@ -44,11 +44,10 @@ pub fn generate(inp: &str) -> Vec<Vec<Node>> {
         .iter_mut()
         .flatten()
         .filter(|it| it.y == 0)
-        .max_by_key(|it| it.x)
-        .unwrap();
+        .max_by_key(|it| it.x)?;
     target_node.is_target = true;
 
-    nodes
+    Some(nodes)
 }
 
 fn part1_impl(nodes: &[Vec<Node>]) -> Vec<(Node, Node)> {
@@ -70,7 +69,7 @@ pub fn part1(nodes: &[Vec<Node>]) -> usize {
 }
 
 #[aoc(day22, part2)]
-pub fn part2(_: &[Vec<Node>]) -> usize {
+pub const fn part2(_: &[Vec<Node>]) -> usize {
     /*
     let available_pairs = part1_impl(nodes)
         .iter()
@@ -149,7 +148,10 @@ mod tests {
 
     #[test]
     fn test_sample_p1() {
-        let data = generate(TEST_DATA);
+        let Some(data) = generate(TEST_DATA) else {
+            panic!("Could not generate test data")
+        };
+
         let result = part1(&data);
         assert_eq!(7, result);
     }

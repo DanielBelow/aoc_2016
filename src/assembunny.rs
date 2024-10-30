@@ -7,7 +7,7 @@ pub struct Cpu {
 }
 
 impl Cpu {
-    pub fn run_instructions(&mut self, instructions: &mut Vec<Instruction>) -> i32 {
+    pub fn run_instructions(&mut self, instructions: &mut [Instruction]) -> i32 {
         while self.pc < instructions.len() {
             let inst = instructions[self.pc];
             match inst {
@@ -40,7 +40,10 @@ impl Cpu {
                 }
                 Instruction::Toggle(r) => {
                     let offset = self.registers[to_register(r)];
+
+                    #[allow(clippy::cast_possible_wrap)]
                     let toggle_index = usize::try_from(self.pc as i64 + i64::from(offset)).ok();
+
                     if let Some(toggle_index) = toggle_index {
                         if toggle_index < instructions.len() {
                             instructions[toggle_index].toggle();
@@ -79,8 +82,8 @@ fn to_register(c: char) -> usize {
 impl Value {
     fn evaluate(self, regs: &[i32; 4]) -> i32 {
         match self {
-            Value::Immediate(val) => val,
-            Value::Register(r) => regs[to_register(r)],
+            Self::Immediate(val) => val,
+            Self::Register(r) => regs[to_register(r)],
         }
     }
 }
@@ -107,20 +110,20 @@ pub enum Instruction {
 impl Instruction {
     fn toggle(&mut self) {
         *self = match *self {
-            Instruction::Copy(val, r) => {
+            Self::Copy(val, r) => {
                 let offset = Value::Register(r);
-                Instruction::JumpNotZero(val, offset)
+                Self::JumpNotZero(val, offset)
             }
-            Instruction::Inc(r) => Instruction::Dec(r),
-            Instruction::Dec(r) | Instruction::Toggle(r) => Instruction::Inc(r),
-            Instruction::JumpNotZero(val, offset) => {
+            Self::Inc(r) => Self::Dec(r),
+            Self::Dec(r) | Self::Toggle(r) => Self::Inc(r),
+            Self::JumpNotZero(val, offset) => {
                 if let Value::Register(r) = offset {
-                    Instruction::Copy(val, r)
+                    Self::Copy(val, r)
                 } else {
-                    Instruction::Invalid
+                    Self::Invalid
                 }
             }
-            Instruction::Invalid => Instruction::Invalid,
+            Self::Invalid => Self::Invalid,
         };
     }
 }

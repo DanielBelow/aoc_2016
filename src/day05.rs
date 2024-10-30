@@ -25,7 +25,7 @@ pub fn part1(inp: &str) -> Option<String> {
 pub fn part2(inp: &str) -> Option<String> {
     const PLACEHOLDER: char = '_';
 
-    let mut password = vec![PLACEHOLDER; 8];
+    let mut password = [PLACEHOLDER; 8];
     let mut num_found = 0;
 
     for idx in 0usize.. {

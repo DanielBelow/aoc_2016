@@ -27,11 +27,7 @@ impl<'a> HashCache<'a> {
 fn has_repetitions(num: usize, hash: &str, target: Option<char>) -> Option<char> {
     let v = hash.chars().collect_vec();
     let res = v.windows(num).find(|it| {
-        if let Some(tgt) = target {
-            it.iter().all(|c| *c == tgt)
-        } else {
-            it.iter().all_equal()
-        }
+        target.map_or_else(|| it.iter().all_equal(), |tgt| it.iter().all(|c| *c == tgt))
     });
 
     res.map(|it| it[0])

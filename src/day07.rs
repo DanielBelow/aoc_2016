@@ -10,17 +10,17 @@ fn supports_tls(ip: &str) -> bool {
     let mut is_inside_brackets = false;
 
     for idx in 0..ip.len() - 3 {
-        let cur_char = ip.chars().nth(idx).unwrap();
+        let cur_char = ip.chars().nth(idx).expect("Invalid idx");
         if cur_char == '[' {
             is_inside_brackets = true;
         } else if cur_char == ']' {
             is_inside_brackets = false;
         }
 
-        let next_char = ip.chars().nth(idx + 1).unwrap();
+        let next_char = ip.chars().nth(idx + 1).expect("Invalid idx + 1");
         if next_char != cur_char
-            && cur_char == ip.chars().nth(idx + 3).unwrap()
-            && next_char == ip.chars().nth(idx + 2).unwrap()
+            && cur_char == ip.chars().nth(idx + 3).expect("Invalid idx + 3")
+            && next_char == ip.chars().nth(idx + 2).expect("Invalid idx + 2")
         {
             if is_inside_brackets {
                 return false;
@@ -40,15 +40,15 @@ fn supports_ssl(ip: &str) -> bool {
     let mut triples_outside = Vec::new();
 
     for idx in 0..ip.len() - 2 {
-        let cur_char = ip.chars().nth(idx).unwrap();
+        let cur_char = ip.chars().nth(idx).expect("Invalid idx");
         if cur_char == '[' {
             is_inside_brackets = true;
         } else if cur_char == ']' {
             is_inside_brackets = false;
         }
 
-        let next_char = ip.chars().nth(idx + 1).unwrap();
-        if next_char != cur_char && cur_char == ip.chars().nth(idx + 2).unwrap() {
+        let next_char = ip.chars().nth(idx + 1).expect("Invalid idx + 1");
+        if next_char != cur_char && cur_char == ip.chars().nth(idx + 2).expect("Invalid idx + 2") {
             if is_inside_brackets {
                 triples_inside.push((cur_char, next_char));
             } else {

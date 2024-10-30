@@ -5,14 +5,14 @@ pub fn generate(inp: &str) -> Vec<String> {
     vec![inp.to_string()]
 }
 
-fn get_new_tile(left: char, center: char, right: char) -> char {
+const fn get_new_tile(left: char, center: char, right: char) -> char {
     match (left, center, right) {
         ('^', '^' | '.', '.') | ('.', '^' | '.', '^') => '^',
         _ => '.',
     }
 }
 
-fn get_next_row(current: &String) -> (String, usize) {
+fn get_next_row(current: &str) -> (String, usize) {
     assert!(!current.is_empty());
     let row_len = current.len();
 

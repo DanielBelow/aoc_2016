@@ -45,9 +45,7 @@ where
         .map(|(k, _)| k.clone())
         .collect_vec();
 
-    while !queue.is_empty() {
-        let cur_bot = queue.pop().unwrap();
-
+    while let Some(cur_bot) = queue.pop() {
         let bot_values = bots.get_mut(&cur_bot)?;
         if pred(bot_values) {
             return cur_bot.strip_prefix("bot ").and_then(|it| it.parse().ok());
@@ -63,7 +61,7 @@ where
         }) = transfer_inst
         {
             let mut add_target = |tgt: String, val: i64| {
-                let values = bots.entry(tgt.clone()).or_insert_with(Vec::new);
+                let values = bots.entry(tgt.clone()).or_default();
                 values.push(val);
                 values.sort_unstable();
 
@@ -83,7 +81,7 @@ where
 fn initial_state(inp: &[Instruction]) -> HashMap<String, Vec<i64>> {
     inp.iter().fold(HashMap::new(), |mut acc, it| {
         if let Instruction::Input { value, target } = it {
-            let elem = acc.entry(target.clone()).or_insert_with(Vec::new);
+            let elem = acc.entry(target.clone()).or_default();
             elem.push(*value);
             elem.sort_unstable();
         }
@@ -99,15 +97,15 @@ pub fn part1(inp: &[Instruction]) -> Option<usize> {
 }
 
 #[aoc(day10, part2)]
-pub fn part2(inp: &[Instruction]) -> i64 {
+pub fn part2(inp: &[Instruction]) -> Option<i64> {
     let mut state = initial_state(inp);
     run_instructions_until(inp, &mut state, |_| false);
 
-    let out0 = state.get("output 0").unwrap();
-    let out1 = state.get("output 1").unwrap();
-    let out2 = state.get("output 2").unwrap();
+    let out0 = state.get("output 0")?;
+    let out1 = state.get("output 1")?;
+    let out2 = state.get("output 2")?;
 
-    out0[0] * out1[0] * out2[0]
+    Some(out0[0] * out1[0] * out2[0])
 }
 
 #[cfg(test)]
@@ -127,7 +125,7 @@ mod tests {
         let mut map = HashMap::new();
         map.insert("bot 2".to_string(), vec![2i64, 5]);
         map.insert("bot 1".to_string(), vec![3]);
-        let res = run_instructions_until(&gen, &mut map, |it| *it == vec![2, 5]).unwrap();
-        assert_eq!(res, 2);
+        let res = run_instructions_until(&gen, &mut map, |it| *it == vec![2, 5]);
+        assert_eq!(res, Some(2));
     }
 }

@@ -14,29 +14,29 @@ impl Position {
             "This should only be called on valid nodes!"
         );
 
-        chr.to_digit(10).unwrap() as usize
+        chr.to_digit(10).expect("Checked is_ascii_digit()") as usize
     }
 
-    fn successors(&self, map: &[Vec<char>]) -> Vec<(Position, usize)> {
+    fn successors(&self, map: &[Vec<char>]) -> Vec<(Self, usize)> {
         let mut successors = Vec::new();
 
         let x = self.0;
         let y = self.1;
 
         if x > 0 && map[x - 1][y] != '#' {
-            successors.push((Position(x - 1, y), 1));
+            successors.push((Self(x - 1, y), 1));
         }
 
         if x < map.len() - 1 && map[x + 1][y] != '#' {
-            successors.push((Position(x + 1, y), 1));
+            successors.push((Self(x + 1, y), 1));
         }
 
         if y > 0 && map[x][y - 1] != '#' {
-            successors.push((Position(x, y - 1), 1));
+            successors.push((Self(x, y - 1), 1));
         }
 
         if y < map[x].len() - 1 && map[x][y + 1] != '#' {
-            successors.push((Position(x, y + 1), 1));
+            successors.push((Self(x, y + 1), 1));
         }
 
         successors
@@ -78,7 +78,7 @@ fn get_vertex_names(nodes: &[Position], map: &[Vec<char>]) -> Vec<usize> {
 }
 
 #[allow(clippy::cast_precision_loss)]
-fn get_distance_matrix(nodes: &Vec<Position>, map: &[Vec<char>]) -> Vec<Vec<f64>> {
+fn get_distance_matrix(nodes: &[Position], map: &[Vec<char>]) -> Vec<Vec<f64>> {
     let mut distance_matrix = vec![vec![0f64; nodes.len()]; nodes.len()];
 
     for idx in 0..nodes.len() {

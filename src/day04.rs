@@ -30,7 +30,7 @@ impl Room {
 
     fn shift(&self) -> Self {
         let cipher = Caesar::new(self.sector_id % 26);
-        let decrypted = cipher.encrypt(&self.name).unwrap();
+        let decrypted = cipher.encrypt(&self.name).expect("Failed to encrypt");
 
         Self {
             name: decrypted,

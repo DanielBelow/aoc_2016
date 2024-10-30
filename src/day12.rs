@@ -6,7 +6,7 @@ pub fn generate(inp: &str) -> Vec<Instruction> {
     parse_instructions(inp)
 }
 
-fn execute_instructions(cpu: &mut Cpu, instructions: &mut Vec<Instruction>) -> i32 {
+fn execute_instructions(cpu: &mut Cpu, instructions: &mut [Instruction]) -> i32 {
     cpu.run_instructions(instructions)
 }
 

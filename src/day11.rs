@@ -15,7 +15,7 @@ pub enum Kind {
 }
 
 impl Kind {
-    fn values() -> [Kind; 7] {
+    const fn values() -> [Self; 7] {
         [
             Elerium, Dilithium, Plutonium, Promethium, Ruthenium, Strontium, Thulium,
         ]
@@ -49,9 +49,7 @@ impl PartialEq for State {
 impl Hash for State {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.elevator.hash(state);
-
-        let pairs = self.find_pairs();
-        pairs.hash(state);
+        self.find_pairs().hash(state);
     }
 }
 
@@ -82,14 +80,14 @@ impl State {
         self.floors.iter().all(|it| is_valid_floor(it))
     }
 
-    fn can_move_in_direction(&self, dir: Direction) -> bool {
+    const fn can_move_in_direction(&self, dir: Direction) -> bool {
         match dir {
             Direction::Up => self.elevator < 3,
             Direction::Down => self.elevator > 0,
         }
     }
 
-    fn move_single_item(&self, idx: usize, dir: Direction) -> Option<State> {
+    fn move_single_item(&self, idx: usize, dir: Direction) -> Option<Self> {
         if !self.can_move_in_direction(dir) {
             return None;
         }
@@ -113,7 +111,7 @@ impl State {
         }
     }
 
-    fn move_two_items(&self, i: usize, j: usize, dir: Direction) -> Option<State> {
+    fn move_two_items(&self, i: usize, j: usize, dir: Direction) -> Option<Self> {
         if !self.can_move_in_direction(dir) {
             return None;
         }
@@ -140,7 +138,7 @@ impl State {
         }
     }
 
-    fn reachable_states(&self) -> Vec<State> {
+    fn reachable_states(&self) -> Vec<Self> {
         let mut reachable_states = vec![];
 
         let items_on_current_floor = self.floors[self.elevator].len();
@@ -293,6 +291,6 @@ mod tests {
         };
 
         let result = part1(&state);
-        assert_eq!(11, result.unwrap());
+        assert_eq!(result, Some(11));
     }
 }

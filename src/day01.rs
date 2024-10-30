@@ -28,7 +28,7 @@ impl State {
     const CCW_ROTATION: Complex<i64> = Complex::new(0, 1);
     const CW_ROTATION: Complex<i64> = Complex::new(0, -1);
 
-    fn new() -> Self {
+    const fn new() -> Self {
         Self {
             dir: Complex::new(0, 1),
             pos: Complex::new(0, 0),

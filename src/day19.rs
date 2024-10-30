@@ -9,14 +9,14 @@ pub fn generate(inp: &str) -> Option<usize> {
 
 #[aoc(day19, part1)]
 #[allow(clippy::trivially_copy_pass_by_ref)]
-pub fn part1(inp: &usize) -> usize {
+pub fn part1(inp: &usize) -> Option<usize> {
     let binary = format!("{inp:b}");
 
     let mut vec = binary.chars().map(|it| it.to_string()).collect_vec();
     vec.rotate_left(1);
 
     let joined = vec.join("");
-    usize::from_str_radix(&joined, 2).unwrap()
+    usize::from_str_radix(&joined, 2).ok()
 }
 
 #[aoc(day19, part2)]
@@ -40,11 +40,11 @@ pub fn part2(inp: &usize) -> Option<usize> {
             right.pop_back();
         }
 
-        right.push_front(left.pop_front().unwrap());
-        left.push_back(right.pop_back().unwrap());
+        right.push_front(left.pop_front()?);
+        left.push_back(right.pop_back()?);
     }
 
-    left.get(0).or_else(|| right.get(0)).copied()
+    left.front().or_else(|| right.front()).copied()
 }
 
 #[cfg(test)]
@@ -54,12 +54,12 @@ mod tests {
     #[test]
     fn test_sample_p1() {
         let res = part1(&5);
-        assert_eq!(res, 3);
+        assert_eq!(res, Some(3));
     }
 
     #[test]
     fn test_sample_p2() {
         let res = part2(&5);
-        assert_eq!(res.unwrap(), 2);
+        assert_eq!(res, Some(2));
     }
 }

@@ -35,8 +35,8 @@ fn setup_grid(inp: usize) -> Vec<Vec<char>> {
 }
 
 #[aoc(day13, part1)]
-pub fn part1(inp: &str) -> usize {
-    let inp = inp.parse::<usize>().unwrap();
+pub fn part1(inp: &str) -> Option<usize> {
+    let inp = inp.parse::<usize>().ok()?;
     let grid = setup_grid(inp);
 
     pathfinding::prelude::bfs(
@@ -44,21 +44,22 @@ pub fn part1(inp: &str) -> usize {
         |&(x, y)| get_successors(x, y, &grid),
         |&(x, y)| x == 31 && y == 39,
     )
-    .unwrap()
-    .len()
+    .map(|it| it.len())
 }
 
 #[aoc(day13, part2)]
-pub fn part2(inp: &str) -> usize {
-    let inp = inp.parse::<usize>().unwrap();
+pub fn part2(inp: &str) -> Option<usize> {
+    let inp = inp.parse::<usize>().ok()?;
 
     let grid = setup_grid(inp);
 
-    1 + pathfinding::prelude::dijkstra_all(&(1, 1), |&(x, y)| {
-        let successors = get_successors(x, y, &grid);
-        successors.iter().map(|it| (*it, 1)).collect_vec()
-    })
-    .iter()
-    .filter(|(_, &(_, cost))| cost <= 50)
-    .count()
+    Some(
+        1 + pathfinding::prelude::dijkstra_all(&(1, 1), |&(x, y)| {
+            let successors = get_successors(x, y, &grid);
+            successors.iter().map(|it| (*it, 1)).collect_vec()
+        })
+        .iter()
+        .filter(|(_, &(_, cost))| cost <= 50)
+        .count(),
+    )
 }
